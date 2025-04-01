@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Diagnóstico de Diabetes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2a7f62;
+            --secondary: #3aa6b9;
+            --accent: #ff9e00;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --danger: #dc3545;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .header h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: var(--dark);
+            opacity: 0.8;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: rgba(42, 127, 98, 0.1);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(58, 166, 185, 0.2);
+        }
+        
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input, .checkbox-option input {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1f6b4e;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #2c8fa1;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(42, 127, 98, 0.1);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .result-section {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .risk-high {
+            border-left-color: var(--danger);
+        }
+        
+        .risk-medium {
+            border-left-color: var(--accent);
+        }
+        
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container h3 {
+            margin-top: 0;
+            color: var(--primary);
+            text-align: center;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stats-card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 0.5rem 0;
+        }
+        
+        .stats-label {
+            color: var(--dark);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .data-table tr:hover {
+            background-color: rgba(58, 166, 185, 0.1);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .risk-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .risk-badge.risk-high {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .risk-badge.risk-medium {
+            background-color: rgba(255, 158, 0, 0.1);
+            color: var(--accent);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .tab {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab.active {
+                border-bottom: none;
+                border-left-color: var(--primary);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Diagnóstico de Diabetes</h1>
+            <p>Anamnese inteligente e relatórios estatísticos</p>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="form">Formulário</div>
+            <div class="tab" data-tab="results">Resultados</div>
+            <div class="tab" data-tab="reports">Relatórios</div>
+        </div>
+        
+        <!-- Conteúdo da aba Formulário -->
+        <div class="tab-content active" id="form-tab">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <form id="diabetesForm">
+                <!-- Seção 1: Dados Pessoais -->
+                <div class="form-section active" id="section1">
+                    <h2>Dados Pessoais</h2>
+                    
+                    <div class="form-group">
+                        <label for="age">Idade</label>
+                        <input type="number" id="age" name="age" min="1" max="120" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender">Sexo</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Selecione...</option>
+                            <option value="male">Masculino</option>
+                            <option value="female">Feminino</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="weight">Peso (kg)</label>
+                        <input type="number" id="weight" name="weight" step="0.1" min="20" max="300" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="height">Altura (cm)</label>
+                        <input type="number" id="height" name="height" min="100" max="250" required>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button type="button" class="btn btn-outline" disabled>Anterior</button>
+                        <button type="button" class="btn btn-primary next-btn" data-next="section2">Próximo</button>
+                    </div>
+                </div>
+                
+                <!-- Seção 2: Histórico Médico -->
+                <div class="form-section" id="section2">
+                    <h2>Histórico Médico</h2>
+                    
+                    <div class="form-group">
+                        <label>Histórico familiar de diabetes?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="family_history_yes" name="family_history" value="yes" required>
+                                <label for="family_history_yes">Sim</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="family_history_no" name="family_history" value="no">
+                                <label for="family_history_no">Não</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hypertension">Possui hipertensão?</label>
+                        <select id="hypertension" name="hypertension" required>
+                            <option value="">Selecione...</option>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="heart_disease">Possui doenças cardíacas?</label>
+                        <select id="heart_disease" name="heart_disease" required>
+                            <option value="">Selecione...</option>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button type="button" class="btn btn-outline prev-btn" data-prev="section1">Anterior</button>
+                        <button type="button" class="btn btn-primary next-btn" data-next="section3">Próximo</button>
+                    </div>
+                </div>
+                
+                <!-- Seção 3: Sintomas Atuais -->
+                <div class="form-section" id="section3">
+                    <h2>Sintomas Atuais</h2>
+                    
+                    <div class="form-group">
+                        <label for="glucose">Nível de glicose no sangue (mg/dL)</label>
+                        <input type="number" id="glucose" name="glucose" min="50" max="500" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sintomas frequentes (marque todos que se aplicam)</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="symptom_thirst" name="symptoms" value="thirst">
+                                <label for="symptom_thirst">Sede excessiva</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="symptom_urination" name="symptoms" value="urination">
+                                <label for="symptom_urination">Micção frequente</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="symptom_hunger" name="symptoms" value="hunger">
+                                <label for="symptom_hunger">Fome excessiva</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="symptom_fatigue" name="symptoms" value="fatigue">
+                                <label for="symptom_fatigue">Fadiga</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="symptom_blurred" name="symptoms" value="blurred">
+                                <label for="symptom_blurred">Visão turva</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="symptom_weight" name="symptoms" value="weight">
+                                <label for="symptom_weight">Perda de peso inexplicada</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="symptom_duration">Há quanto tempo apresenta esses sintomas?</label>
+                        <select id="symptom_duration" name="symptom_duration" required>
+                            <option value="">Selecione...</option>
+                            <option value="days">Dias</option>
+                            <option value="weeks">Semanas</option>
+                            <option value="months">Meses</option>
+                            <option value="years">Anos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button type="button" class="btn btn-outline prev-btn" data-prev="section2">Anterior</button>
+                        <button type="button" class="btn btn-primary next-btn" data-next="section4">Próximo</button>
+                    </div>
+                </div>
+                
+                <!-- Seção 4: Estilo de Vida -->
+                <div class="form-section" id="section4">
+                    <h2>Estilo de Vida</h2>
+                    
+                    <div class="form-group">
+                        <label for="activity_level">Nível de atividade física</label>
+                        <select id="activity_level" name="activity_level" required>
+                            <option value="">Selecione...</option>
+                            <option value="sedentary">Sedentário (pouco ou nenhum exercício)</option>
+                            <option value="light">Leve (exercício leve 1-3 dias/semana)</option>
+                            <option value="moderate">Moderado (exercício moderado 3-5 dias/semana)</option>
+                            <option value="active">Ativo (exercício intenso 6-7 dias/semana)</option>
+                            <option value="very_active">Muito ativo (exercício intenso diariamente ou trabalho físico)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="diet">Padrão alimentar</label>
+                        <select id="diet" name="diet" required>
+                            <option value="">Selecione...</option>
+                            <option value="balanced">Balanceada</option>
+                            <option value="high_carb">Rica em carboidratos</option>
+                            <option value="high_fat">Rica em gorduras</option>
+                            <option value="high_protein">Rica em proteínas</option>
+                            <option value="processed">Muitos alimentos processados</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="smoking">Fuma atualmente?</label>
+                        <select id="smoking" name="smoking" required>
+                            <option value="">Selecione...</option>
+                            <option value="never">Nunca fumei</option>
+                            <option value="former">Ex-fumante</option>
+                            <option value="current">Fumante atual</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="alcohol">Consumo de álcool</label>
+                        <select id="alcohol" name="alcohol" required>
+                            <option value="">Selecione...</option>
+                            <option value="never">Nunca</option>
+                            <option value="occasionally">Ocasionalmente</option>
+                            <option value="moderately">Moderadamente</option>
+                            <option value="heavily">Frequentemente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button type="button" class="btn btn-outline prev-btn" data-prev="section3">Anterior</button>
+                        <button type="button" class="btn btn-primary next-btn" data-next="section5">Próximo</button>
+                    </div>
+                </div>
+                
+                <!-- Seção 5: Informações Adicionais -->
+                <div class="form-section" id="section5">
+                    <h2>Informações Adicionais</h2>
+                    
+                    <div class="form-group">
+                        <label for="pregnancies">Número de gestações (se aplicável)</label>
+                        <input type="number" id="pregnancies" name="pregnancies" min="0" max="20" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="skin_thickness">Espessura da pele do tríceps (mm)</label>
+                        <input type="number" id="skin_thickness" name="skin_thickness" min="10" max="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="insulin">Nível de insulina (μU/mL)</label>
+                        <input type="number" id="insulin" name="insulin" min="0" max="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Observações adicionais</label>
+                        <textarea id="notes" name="notes" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button type="button" class="btn btn-outline prev-btn" data-prev="section4">Anterior</button>
+                        <button type="button" id="submitBtn" class="btn btn-primary">Enviar e Analisar</button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Seção de Resultados -->
+            <div class="result-section" id="resultSection">
+                <h2>Resultado da Análise</h2>
+                <p>Com base nas informações fornecidas, nosso modelo de machine learning identificou:</p>
+                
+                <div class="result-card" id="resultCard">
+                    <h3 id="diagnosisTitle">Diagnóstico Preliminar</h3>
+                    <p id="diagnosisText">Carregando resultados...</p>
+                    <div id="probabilityMeter"></div>
+                    <p id="recommendations"></p>
+                </div>
+                
+                <button type="button" id="restartBtn" class="btn btn-secondary">Realizar Nova Análise</button>
+            </div>
+        </div>
+        
+        <!-- Conteúdo da aba Resultados -->
+        <div class="tab-content" id="results-tab">
+            <h2>Histórico de Diagnósticos</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="date-filter">Período</label>
+                    <select id="date-filter" class="form-control">
+                        <option value="7">Últimos 7 dias</option>
+                        <option value="30">Últimos 30 dias</option>
+                        <option value="90">Últimos 3 meses</option>
+                        <option value="365">Último ano</option>
+                        <option value="all">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="type-filter">Tipo de Diabetes</label>
+                    <select id="type-filter" class="form-control">
+                        <option value="all">Todos</option>
+                        <option value="0">Sem diabetes</option>
+                        <option value="1">Tipo 1</option>
+                        <option value="2">Tipo 2</option>
+                        <option value="3">Gestacional</option>
+                        <option value="4">Pré-diabetes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="risk-filter">Nível de Risco</label>
+                    <select id="risk-filter" class="form-control">
+                        <option value="all">Todos</option>
+                        <option value="high">Alto (70%+)</option>
+                        <option value="medium">Médio (40-70%)</option>
+                        <option value="low">Baixo (0-40%)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="diagnosisTrendChart"></canvas>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Paciente</th>
+                        <th>Idade</th>
+                        <th>Tipo</th>
+                        <th>Probabilidade</th>
+                        <th>Nível de Risco</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table">
+                    <!-- Dados serão preenchidos via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Conteúdo da aba Relatórios -->
+        <div class="tab-content" id="reports-tab">
+            <h2>Relatórios Estatísticos</h2>
+            
+            <div class="report-grid">
+                <div class="stats-card">
+                    <h3>Total de Diagnósticos</h3>
+                    <div class="stats-value" id="total-diagnoses">0</div>
+                    <div class="stats-label">Desde o início do sistema</div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Casos de Diabetes</h3>
+                    <div class="stats-value" id="diabetes-cases">0</div>
+                    <div class="stats-label">Confirmados pelo sistema</div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Média de Idade</h3>
+                    <div class="stats-value" id="average-age">0</div>
+                    <div class="stats-label">Dos pacientes diagnosticados</div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Taxa de Risco</h3>
+                    <div class="stats-value" id="high-risk-rate">0%</div>
+                    <div class="stats-label">Casos de alto risco</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Distribuição por Tipo de Diabetes</h3>
+                <canvas id="diabetesDistributionChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Fatores de Risco Mais Comuns</h3>
+                <canvas id="riskFactorsChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Evolução Mensal de Casos</h3>
+                <canvas id="monthlyTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Controle do formulário multi-etapas
+            const sections = document.querySelectorAll('.form-section');
+            const progressBar = document.getElementById('progress');
+            const nextButtons = document.querySelectorAll('.next-btn');
+            const prevButtons = document.querySelectorAll('.prev-btn');
+            const submitBtn = document.getElementById('submitBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const form = document.getElementById('diabetesForm');
+            const resultSection = document.getElementById('resultSection');
+            
+            let currentSection = 0;
+            const totalSections = sections.length;
+            
+            function updateProgress() {
+                const progress = ((currentSection + 1) / totalSections) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            function showSection(index) {
+                sections.forEach((section, i) => {
+                    section.classList.toggle('active', i === index);
+                });
+                currentSection = index;
+                updateProgress();
+            }
+            
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const nextSection = this.dataset.next;
+                    const nextIndex = Array.from(sections).findIndex(section => section.id === nextSection);
+                    
+                    let isValid = true;
+                    const currentSectionEl = sections[currentSection];
+                    const inputs = currentSectionEl.querySelectorAll('input[required], select[required]');
+                    
+                    inputs.forEach(input => {
+                        if (!input.value) {
+                            input.style.borderColor = 'var(--danger)';
+                            isValid = false;
+                        } else {
+                            input.style.borderColor = '#ddd';
+                        }
+                    });
+                    
+                    if (isValid) {
+                        showSection(nextIndex);
+                    } else {
+                        alert('Por favor, preencha todos os campos obrigatórios antes de continuar.');
+                    }
+                });
+            });
+            
+            prevButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const prevSection = this.dataset.prev;
+                    const prevIndex = Array.from(sections).findIndex(section => section.id === prevSection);
+                    showSection(prevIndex);
+                });
+            });
+            
+            // Envio do formulário
+            submitBtn.addEventListener('click', async function() {
+                const formData = {
+                    age: document.getElementById('age').value,
+                    gender: document.getElementById('gender').value,
+                    weight: parseFloat(document.getElementById('weight').value),
+                    height: parseInt(document.getElementById('height').value),
+                    family_history: document.querySelector('input[name="family_history"]:checked')?.value,
+                    hypertension: document.getElementById('hypertension').value,
+                    heart_disease: document.getElementById('heart_disease').value,
+                    glucose: parseInt(document.getElementById('glucose').value),
+                    symptoms: Array.from(document.querySelectorAll('input[name="symptoms"]:checked')).map(el => el.value),
+                    symptom_duration: document.getElementById('symptom_duration').value,
+                    activity_level: document.getElementById('activity_level').value,
+                    diet: document.getElementById('diet').value,
+                    smoking: document.getElementById('smoking').value,
+                    alcohol: document.getElementById('alcohol').value,
+                    pregnancies: parseInt(document.getElementById('pregnancies').value) || 0,
+                    skin_thickness: parseInt(document.getElementById('skin_thickness').value) || null,
+                    insulin: parseInt(document.getElementById('insulin').value) || null
+                };
+                
+                try {
+                    // Enviar para a API
+                    const response = await fetch('http://localhost:3000/api/patients', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Erro ao enviar dados');
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Mostrar seção de resultados
+                    form.style.display = 'none';
+                    resultSection.style.display = 'block';
+                    
+                    // Buscar resultados completos
+                    const resultResponse = await fetch(`http://localhost:3000/api/results/${result.patientId}`);
+                    const resultData = await resultResponse.json();
+                    
+                    // Exibir resultados
+                    document.getElementById('diagnosisTitle').textContent = resultData.diabetes_type;
+                    document.getElementById('diagnosisText').textContent = `Com base nos dados fornecidos, nosso modelo identificou um risco de ${resultData.probability}% para ${resultData.diabetes_type}.`;
+                    
+                    // Adicionar classe de risco
+                    const resultCard = document.getElementById('resultCard');
+                    resultCard.className = 'result-card';
+                    if (resultData.probability > 70) {
+                        resultCard.classList.add('risk-high');
+                    } else if (resultData.probability > 40) {
+                        resultCard.classList.add('risk-medium');
+                    }
+                    
+                    // Exibir recomendações
+                    document.getElementById('recommendations').innerHTML = `
+                        <strong>Recomendações:</strong>
+                        <ul style="text-align: left; margin-top: 1rem;">
+                            ${resultData.recommendations.split('\n').map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    `;
+                    
+                    // Criar medidor de probabilidade visual
+                    const probabilityMeter = document.getElementById('probabilityMeter');
+                    probabilityMeter.innerHTML = `
+                        <div style="margin: 1.5rem 0; text-align: center;">
+                            <div style="background: #e9ecef; height: 20px; border-radius: 10px; margin-bottom: 0.5rem; overflow: hidden;">
+                                <div style="background: linear-gradient(to right, #28a745, #ffc107, #dc3545); width: ${resultData.probability}%; height: 100%;"></div>
+                            </div>
+                            <p>Probabilidade estimada: ${resultData.probability}%</p>
+                        </div>
+                    `;
+                    
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente.');
+                }
+            });
+            
+            // Reiniciar o formulário
+            restartBtn.addEventListener('click', function() {
+                form.style.display = 'block';
+                resultSection.style.display = 'none';
+                form.reset();
+                showSection(0);
+                document.getElementById('resultCard').className = 'result-card';
+            });
+            
+            // Controle das abas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remover classe active de todas as abas e conteúdos
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Adicionar classe active à aba clicada
+                    this.classList.add('active');
+                    
+                    // Mostrar conteúdo correspondente
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Carregar dados se for a aba de relatórios
+                    if (tabId === 'reports') {
+                        loadReportsData();
+                    } else if (tabId === 'results') {
+                        loadResultsData();
+                    }
+                });
+            });
+            
+            // Função para carregar dados dos relatórios
+            async function loadReportsData() {
+                try {
+                    const response = await fetch('/api/reports');
+                    const data = await response.json();
+                    
+                    // Atualizar estatísticas
+                    document.getElementById('total-diagnoses').textContent = data.totalDiagnoses;
+                    document.getElementById('diabetes-cases').textContent = data.diabetesCases;
+                    document.getElementById('average-age').textContent = data.averageAge;
+                    document.getElementById('high-risk-rate').textContent = `${data.highRiskRate}%`;
+                    
+                    // Gráfico de distribuição
+                    renderDistributionChart(data.distribution);
+                    
+                    // Gráfico de fatores de risco
+                    renderRiskFactorsChart(data.riskFactors);
+                    
+                    // Gráfico de tendência mensal
+                    renderMonthlyTrendChart(data.monthlyTrend);
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar relatórios:', error);
+                }
+            }
+            
+            // Função para carregar dados dos resultados
+            async function loadResultsData() {
+                try {
+                    const dateFilter = document.getElementById('date-filter').value;
+                    const typeFilter = document.getElementById('type-filter').value;
+                    const riskFilter = document.getElementById('risk-filter').value;
+                    
+                    const response = await fetch(`/api/results?days=${dateFilter}&type=${typeFilter}&risk=${riskFilter}`);
+                    const data = await response.json();
+                    
+                    // Preencher tabela
+                    const tableBody = document.getElementById('results-table');
+                    tableBody.innerHTML = data.results.map(result => `
+                        <tr>
+                            <td>${new Date(result.created_at).toLocaleDateString()}</td>
+                            <td>Paciente #${result.patient_id}</td>
+                            <td>${result.age} anos</td>
+                            <td>${result.diabetes_type}</td>
+                            <td>${result.probability}%</td>
+                            <td>
+                                <span class="risk-badge ${getRiskClass(result.probability)}">
+                                    ${getRiskLevel(result.probability)}
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('');
+                    
+                    // Renderizar gráfico de tendência
+                    renderDiagnosisTrendChart(data.trendData);
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar resultados:', error);
+                }
+            }
+            
+            // Funções auxiliares para gráficos
+            function renderDistributionChart(data) {
+                const ctx = document.getElementById('diabetesDistributionChart').getContext('2d');
+                
+                if (window.distributionChart) {
+                    window.distributionChart.destroy();
+                }
+                
+                window.distributionChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            backgroundColor: [
+                                '#2a7f62',
+                                '#3aa6b9',
+                                '#ff9e00',
+                                '#dc3545',
+                                '#6c757d'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function renderRiskFactorsChart(data) {
+                const ctx = document.getElementById('riskFactorsChart').getContext('2d');
+                
+                if (window.riskFactorsChart) {
+                    window.riskFactorsChart.destroy();
+                }
+                
+                window.riskFactorsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Ocorrências',
+                            data: data.values,
+                            backgroundColor: '#3aa6b9',
+                            borderColor: '#2a7f62',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function renderMonthlyTrendChart(data) {
+                const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
+                
+                if (window.monthlyTrendChart) {
+                    window.monthlyTrendChart.destroy();
+                }
+                
+                window.monthlyTrendChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Casos de Diabetes',
+                            data: data.values,
+                            backgroundColor: 'rgba(42, 127, 98, 0.2)',
+                            borderColor: '#2a7f62',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function renderDiagnosisTrendChart(data) {
+                const ctx = document.getElementById('diagnosisTrendChart').getContext('2d');
+                
+                if (window.diagnosisTrendChart) {
+                    window.diagnosisTrendChart.destroy();
+                }
+                
+                window.diagnosisTrendChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Sem diabetes',
+                                data: data.noDiabetes,
+                                borderColor: '#2a7f62',
+                                backgroundColor: 'rgba(42, 127, 98, 0.1)',
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Pré-diabetes',
+                                data: data.preDiabetes,
+                                borderColor: '#6c757d',
+                                backgroundColor: 'rgba(108, 117, 125, 0.1)',
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Diabetes',
+                                data: data.diabetes,
+                                borderColor: '#dc3545',
+                                backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function getRiskLevel(probability) {
+                if (probability > 70) return 'Alto';
+                if (probability > 40) return 'Médio';
+                return 'Baixo';
+            }
+            
+            function getRiskClass(probability) {
+                if (probability > 70) return 'risk-high';
+                if (probability > 40) return 'risk-medium';
+                return '';
+            }
+            
+            // Event listeners para filtros
+            document.getElementById('date-filter').addEventListener('change', loadResultsData);
+            document.getElementById('type-filter').addEventListener('change', loadResultsData);
+            document.getElementById('risk-filter').addEventListener('change', loadResultsData);
+            
+            // Inicialização
+            updateProgress();
+            
+            if (window.location.hash === '#reports') {
+                document.querySelector('[data-tab="reports"]').click();
+            } else if (window.location.hash === '#results') {
+                document.querySelector('[data-tab="results"]').click();
+            }
+        });
+    </script>
+</body>
+</html>
