@@ -1,14 +1,18 @@
+import { useNavigate } from "react-router";
 import "../../App.css";
 import { useState } from "react";
 
 export function Pessoal() {
-  const [idade, setIdade] = useState("");
-  // const [sexo, setSexo] = useState("");
-  const [peso, setPeso] = useState("");
-  const [altura, setAltura] = useState("");
+  const navigate = useNavigate()
 
-  function handleNext() {
-    console.log(idade, peso, altura);
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+
+  function teste() {
+    console.log(`Age: ${age}, Gender: ${gender}, Weight: ${weight}, Height: ${height}`);
+    navigate('/historico')
   }
 
   return (
@@ -24,8 +28,8 @@ export function Pessoal() {
             name="age"
             min="1"
             max="120"
-            value={idade}
-            onChange={(e) => setIdade(e.target.value)}
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
             required
           />
         </div>
@@ -33,11 +37,11 @@ export function Pessoal() {
 
       <div className="form-group">
         <label htmlFor="gender">Sexo</label>
-        <select id="gender" name="gender" required>
+        <select id="gender" name="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
           <option value="">Selecione...</option>
-          <option value="male">Masculino</option>
-          <option value="female">Feminino</option>
-          <option value="other">Outro</option>
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+          <option value="outro">Outro</option>
         </select>
       </div>
 
@@ -50,8 +54,8 @@ export function Pessoal() {
           step="0.1"
           min="20"
           max="300"
-          value={peso}
-          onChange={(e) => setPeso(e.target.value)}
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
           required
         />
       </div>
@@ -64,8 +68,8 @@ export function Pessoal() {
           name="height"
           min="100"
           max="250"
-          value={altura}
-          onChange={(e) => setAltura(e.target.value)}
+          value={height}
+          onChange={(e) => setHeight(e.target.value)}
           required
         />
       </div>
@@ -78,7 +82,7 @@ export function Pessoal() {
           type="button"
           className="btn btn-primary next-btn"
           data-next="section2"
-          onClick={handleNext}
+          onClick={teste}
         >
           Próximo
         </button>

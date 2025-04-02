@@ -4,6 +4,8 @@ import { Pessoal } from "./pages/pessoal";
 import { MedicalHistory } from "./pages/medicalHistory";
 import { Sintomas } from "./pages/sintomas";
 import { LifeStyle } from "./pages/estilo";
+import { Results } from "./pages/results";
+import { Relatorios } from "./pages/relatorios";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
       {
         path: "/lifeStyle",
         element: <LifeStyle />,
+      },
+      {
+        path: "/results",
+        element: <Results />,
+      },
+      {
+        path: "/relatorios",
+        element: <Relatorios />,
       },
     ]
   },

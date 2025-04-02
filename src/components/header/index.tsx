@@ -1,7 +1,8 @@
+import { Link } from 'react-router'
 import '../../App.css'
 
 export function Header() {
-    return(
+    return (
         <div className="container">
             <div className="header">
                 <h1>Sistema de Diagnóstico de Diabetes</h1>
@@ -9,15 +10,23 @@ export function Header() {
             </div>
 
             <div className="tabs">
-                <div className="tab active" data-tab="form">
-                    Formulário
-                </div>
-                <div className="tab" data-tab="results">
-                    Resultados
-                </div>
-                <div className="tab" data-tab="reports">
-                    Relatórios
-                </div>
+                <Link to='/'>
+                    <div className="tab active" data-tab="form">
+                        Formulário
+                    </div>
+                </Link>
+
+                <Link to='/results'>
+                    <div className="tab" data-tab="results">
+                        Resultados
+                    </div>
+                </Link>
+
+                <Link to='/relatorios'>
+                    <div className="tab" data-tab="reports">
+                        Relatórios
+                    </div>
+                </Link>
             </div>
 
             {/* <!-- Conteúdo da aba Formulário --> */}
