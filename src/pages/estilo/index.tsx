@@ -1,13 +1,20 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export function LifeStyle() {
+  const navigate = useNavigate()
+
   const [atividade, setAtividade] = useState("");
   const [padraoAlimentar, setPadraoAlimentar] = useState("");
   const [smoke, setSmoke] = useState("");
   const [alcohol, setAlocohol] = useState("");
 
-  function teste() {
-    console.log(atividade)
+  function handleBackPage() {
+    navigate('/sintomas')
+  }
+  function handleNextPage() {
+    console.log(`Atividade Física: ${atividade}, Padrão Alimentar: ${padraoAlimentar}, Fumante: ${smoke}, Alcolatra: ${alcohol}`);
+    navigate('/addInformation')
   }
 
   return (
@@ -75,6 +82,7 @@ export function LifeStyle() {
             type="button"
             className="btn btn-outline prev-btn"
             data-prev="section3"
+            onClick={handleBackPage}
           >
             Anterior
           </button>
@@ -82,7 +90,7 @@ export function LifeStyle() {
             type="button"
             className="btn btn-primary next-btn"
             data-next="section5"
-            onClick={teste}
+            onClick={handleNextPage}
           >
             Próximo
           </button>

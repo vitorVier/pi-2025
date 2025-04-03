@@ -1,13 +1,20 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import '../../App.css'
 
 export function MedicalHistory() {
+    const navigate = useNavigate();
+
     const [diabetes, setDiabetes] = useState("");
     const [hipertensao, setHipertensao] = useState("");
     const [cardiaco, setCardiaco] = useState("");
 
-    function testeDiabete() {
-        console.log(`Diabete: ${diabetes} | Hipertenso: ${hipertensao} | Cardiaco: ${cardiaco}`)
+    function handleBackPage() {
+        navigate('/')
+    }
+    function handleNextPage() {
+        console.log(`Diabético: ${diabetes}, Hipertenso: ${hipertensao}, Cardiaco: ${cardiaco}`);
+        navigate('/sintomas')
     }
 
     return (
@@ -68,6 +75,7 @@ export function MedicalHistory() {
                         type="button"
                         className="btn btn-outline prev-btn"
                         data-prev="section1"
+                        onClick={handleBackPage}
                     >
                         Anterior
                     </button>
@@ -75,7 +83,7 @@ export function MedicalHistory() {
                         type="button"
                         className="btn btn-primary next-btn"
                         data-next="section3"
-                        onClick={testeDiabete}
+                        onClick={handleNextPage}
                     >
                         Próximo
                     </button>

@@ -6,6 +6,7 @@ import { Sintomas } from "./pages/sintomas";
 import { LifeStyle } from "./pages/estilo";
 import { Results } from "./pages/results";
 import { Relatorios } from "./pages/relatorios";
+import { AddInformation } from "./pages/addInformation";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/lifeStyle",
         element: <LifeStyle />,
+      },
+      {
+        path: "/addInformation",
+        element: <AddInformation />,
       },
       {
         path: "/results",

@@ -10,7 +10,7 @@ export function Pessoal() {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
 
-  function teste() {
+  function handleNextPage() {
     console.log(`Age: ${age}, Gender: ${gender}, Weight: ${weight}, Height: ${height}`);
     navigate('/historico')
   }
@@ -82,7 +82,7 @@ export function Pessoal() {
           type="button"
           className="btn btn-primary next-btn"
           data-next="section2"
-          onClick={teste}
+          onClick={handleNextPage}
         >
           Próximo
         </button>
