@@ -5,25 +5,24 @@ export function Sintomas() {
   const navigate = useNavigate()
 
   const [glicose, setGlicose] = useState("");
-  const [sintomasFrequentes, setSintomasFrequentes] = useState([]);
+  const [sintomasFrequentes, setSintomasFrequentes] = useState([""]);
   const [symptomDuration, setSymptomDuration] = useState("");
 
   function handleBackPage() {
     navigate('/historico')
   }
   function handleNextPage() {
-    // 
     console.log(`Nivel de Glicose: ${glicose}, Sintomas Frequentes: ${sintomasFrequentes}, Há quanto tempo apresenta os sintomas: ${symptomDuration}`);
     navigate('/lifeStyle')
   }
 
-  // const handleCheckbox = (event) => {
-  //   const { value, checked } = event.target;
+  function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value, checked } = e.target;
 
-  //   setSintomasFrequentes((prev) =>
-  //     checked ? [...prev, value] : prev.filter((item) => item !== value)
-  //   );
-  // };
+    setSintomasFrequentes((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
+  };
 
   return (
     <form id="diabetesForm">
@@ -53,8 +52,8 @@ export function Sintomas() {
                 id="symptom_thirst"
                 name="symptoms"
                 value="Sede Excessiva"
-                // checked={sintomasFrequentes.includes}
-                // onChange={handleCheckbox}
+                checked={sintomasFrequentes.includes("Sede Excessiva")}
+                onChange={(e) => handleCheckbox(e)}
               />
               <label htmlFor="symptom_thirst">Sede excessiva</label>
             </div>
@@ -63,7 +62,9 @@ export function Sintomas() {
                 type="checkbox"
                 id="symptom_urination"
                 name="symptoms"
-                value="urination"
+                value="Micção frequente"
+                checked={sintomasFrequentes.includes("Micção frequente")}
+                onChange={(e) => handleCheckbox(e)}
               />
               <label htmlFor="symptom_urination">Micção frequente</label>
             </div>
@@ -72,7 +73,9 @@ export function Sintomas() {
                 type="checkbox"
                 id="symptom_hunger"
                 name="symptoms"
-                value="hunger"
+                value="Fome excessiva"
+                checked={sintomasFrequentes.includes("Fome excessiva")}
+                onChange={(e) => handleCheckbox(e)}
               />
               <label htmlFor="symptom_hunger">Fome excessiva</label>
             </div>
@@ -81,7 +84,9 @@ export function Sintomas() {
                 type="checkbox"
                 id="symptom_fatigue"
                 name="symptoms"
-                value="fatigue"
+                value="Fadiga"
+                checked={sintomasFrequentes.includes("Fadiga")}
+                onChange={(e) => handleCheckbox(e)}
               />
               <label htmlFor="symptom_fatigue">Fadiga</label>
             </div>
@@ -90,7 +95,9 @@ export function Sintomas() {
                 type="checkbox"
                 id="symptom_blurred"
                 name="symptoms"
-                value="blurred"
+                value="Visão turva"
+                checked={sintomasFrequentes.includes("Visão turva")}
+                onChange={(e) => handleCheckbox(e)}
               />
               <label htmlFor="symptom_blurred">Visão turva</label>
             </div>
@@ -99,7 +106,9 @@ export function Sintomas() {
                 type="checkbox"
                 id="symptom_weight"
                 name="symptoms"
-                value="weight"
+                value="Perda de peso inexplicada"
+                checked={sintomasFrequentes.includes("Perda de peso inexplicada")}
+                onChange={(e) => handleCheckbox(e)}
               />
               <label htmlFor="symptom_weight">Perda de peso inexplicada</label>
             </div>

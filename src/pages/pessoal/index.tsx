@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router";
-import "../../App.css";
 import { useState } from "react";
+
+import "../../App.css";
+
 
 export function Pessoal() {
   const navigate = useNavigate()
@@ -75,7 +77,7 @@ export function Pessoal() {
       </div>
 
       <div className="navigation">
-        <button type="button" className="btn btn-outline" disabled>
+        <button type="button" className="btn btn-outline" id="pessoalBackBtn" disabled>
           Anterior
         </button>
         <button
