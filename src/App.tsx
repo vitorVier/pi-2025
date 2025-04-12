@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Personal } from "./pages/personal";
 import { MedicalHistory } from "./pages/medicalHistory";
-import { Symptoms } from "./pages/sintomas";
+import { Symptoms } from "./pages/symptoms";
 import { LifeStyle } from "./pages/lifeStyle";
 import { Results } from "./pages/results";
 import { Reports } from "./pages/reports";
