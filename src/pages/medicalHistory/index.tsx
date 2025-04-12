@@ -26,7 +26,7 @@ export function MedicalHistory() {
         dispatch(setDiabetes(localDiabetes))
         dispatch(setHipertensao(localHipertensao))
         dispatch(setCardiaco(localCardiaco))
-        navigate('/sintomas');
+        navigate('/Symptoms');
     }
 
     return (

@@ -27,7 +27,7 @@ export function Personal() {
     dispatch(setWeight(localWeight));
     dispatch(setHeight(localHeight));
 
-    navigate("/historico");
+    navigate("/medicalHistory");
   }
 
   return (

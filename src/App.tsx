@@ -2,10 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Personal } from "./pages/personal";
 import { MedicalHistory } from "./pages/medicalHistory";
-import { Sintomas } from "./pages/sintomas";
-import { LifeStyle } from "./pages/estilo";
+import { Symptoms } from "./pages/sintomas";
+import { LifeStyle } from "./pages/lifeStyle";
 import { Results } from "./pages/results";
-import { Relatorios } from "./pages/relatorios";
+import { Reports } from "./pages/reports";
 import { AddInformation } from "./pages/addInformation";
 
 const router = createBrowserRouter([
@@ -17,12 +17,12 @@ const router = createBrowserRouter([
         element: <Personal />,
       },
       {
-        path: "/historico",
+        path: "/medicalHistory",
         element: <MedicalHistory />,
       },
       {
-        path: "/sintomas",
-        element: <Sintomas />,
+        path: "/symptoms",
+        element: <Symptoms />,
       },
       {
         path: "/lifeStyle",
@@ -37,8 +37,8 @@ const router = createBrowserRouter([
         element: <Results />,
       },
       {
-        path: "/relatorios",
-        element: <Relatorios />,
+        path: "/reports",
+        element: <Reports />,
       },
     ]
   },

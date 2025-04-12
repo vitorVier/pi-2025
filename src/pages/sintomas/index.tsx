@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
 import { setGlicose, setSymptomFrequency, setSymptomDuration } from "../../redux/personal/personalSlice";
 
-export function Sintomas() {
+export function Symptoms() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -16,7 +16,7 @@ export function Sintomas() {
   const [localDuration, setLocalDuration] = useState(symptomDuration || "");
 
   function handleBackPage() {
-    navigate("/historico");
+    navigate("/medicalHistory");
   }
 
   function handleNextPage() {

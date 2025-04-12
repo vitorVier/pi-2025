@@ -16,9 +16,9 @@ export function Header() {
 
             <div className="tabs">
                 <Link to='/'>
-                    <div className={`tab ${location.pathname === '/' ? 'active' : ''}`} data-tab="form">
-                        Formulário
-                    </div>
+                <div className={`tab ${['/', '/medicalHistory', '/sintomas', '/lifeStyle', '/addInformation'].includes(location.pathname) ? 'active' : ''}`} data-tab="form">
+                    Formulário
+                </div>
                 </Link>
 
                 <Link to='/results'>

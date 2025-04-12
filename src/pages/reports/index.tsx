@@ -1,4 +1,4 @@
-export function Relatorios() {
+export function Reports() {
     return (
         <div className="tab-content" id="reports-tab">
             <h2>Relatórios Estatísticos</h2>
