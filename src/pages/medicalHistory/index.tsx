@@ -38,28 +38,32 @@ export function MedicalHistory() {
                     <label htmlFor="family_history">Histórico familiar de diabetes?</label>
                     <div className="radio-group">
                         <div className="radio-option">
-                            <input
-                                type="radio"
-                                id="family_history_yes"
-                                name="family_history"
-                                value="sim"
-                                checked={localDiabetes === 'sim'}
-                                onChange={(e) => setLocalDiabetes(e.target.value)}
-                                required
-                            />
-                            <label htmlFor="family_history_yes">Sim</label>
+                            <label htmlFor="family_history_yes">
+                                <input
+                                    type="radio"
+                                    id="family_history_yes"
+                                    name="family_history"
+                                    value="sim"
+                                    checked={localDiabetes === 'sim'}
+                                    onChange={(e) => setLocalDiabetes(e.target.value)}
+                                    required
+                                />
+                                Sim
+                            </label>
                         </div>
 
                         <div className="radio-option">
-                            <input
-                                type="radio"
-                                id="family_history_no"
-                                name="family_history"
-                                value="não"
-                                checked={localDiabetes === 'não'}
-                                onChange={(e) => setLocalDiabetes(e.target.value)} 
-                            />
-                            <label htmlFor="family_history_no">Não</label>
+                            <label htmlFor="family_history_no">
+                                <input
+                                    type="radio"
+                                    id="family_history_no"
+                                    name="family_history"
+                                    value="não"
+                                    checked={localDiabetes === 'não'}
+                                    onChange={(e) => setLocalDiabetes(e.target.value)} 
+                                />
+                                Não
+                            </label>
                         </div>
                     </div>
                 </div>
