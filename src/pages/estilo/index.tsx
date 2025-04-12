@@ -1,20 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+// @ts-ignore
+import { setAtividade, setPadraoAlimentar, setSmoke, setAlcohol } from "../../redux/personal/personalSlice";
 
 export function LifeStyle() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [atividade, setAtividade] = useState("");
-  const [padraoAlimentar, setPadraoAlimentar] = useState("");
-  const [smoke, setSmoke] = useState("");
-  const [alcohol, setAlocohol] = useState("");
+  // @ts-ignore
+  const { atividade, padraoAlimentar, smoke, alcohol } = useSelector((state) => state.pessoal);
+
+  const [localAtividade, setLocalAtividade] = useState(atividade || "");
+  const [localAlimentar, setLocalAlimentar] = useState(padraoAlimentar || "");
+  const [localSmoke, setLocalSmoke] = useState(smoke || "");
+  const [localAlcohol, setLocalAlcohol] = useState(alcohol || "");
 
   function handleBackPage() {
-    navigate('/sintomas')
+    navigate("/sintomas");
   }
+
   function handleNextPage() {
-    console.log(`Atividade Física: ${atividade}, Padrão Alimentar: ${padraoAlimentar}, Fumante: ${smoke}, Alcolatra: ${alcohol}`);
-    navigate('/addInformation')
+    dispatch(setAtividade(localAtividade));
+    dispatch(setPadraoAlimentar(localAlimentar));
+    dispatch(setSmoke(localSmoke));
+    dispatch(setAlcohol(localAlcohol));
+    navigate("/addInformation");
   }
 
   return (
@@ -24,29 +35,31 @@ export function LifeStyle() {
 
         <div className="form-group">
           <label htmlFor="activity_level">Nível de atividade física</label>
-          <select id="activity_level" name="activity_level" value={atividade} onChange={(e) => setAtividade(e.target.value)} required>
+          <select
+            id="activity_level"
+            name="activity_level"
+            value={localAtividade}
+            onChange={(e) => setLocalAtividade(e.target.value)}
+            required
+          >
             <option value="">Selecione...</option>
-            <option value="sedentário">
-              Sedentário (pouco ou nenhum exercício)
-            </option>
-            <option value="leve">
-              Leve (exercício leve 1-3 dias/semana)
-            </option>
-            <option value="moderado">
-              Moderado (exercício moderado 3-5 dias/semana)
-            </option>
-            <option value="ativo">
-              Ativo (exercício intenso 6-7 dias/semana)
-            </option>
-            <option value="muito ativo">
-              Muito ativo (exercício intenso diariamente ou trabalho físico)
-            </option>
+            <option value="sedentário">Sedentário (pouco ou nenhum exercício)</option>
+            <option value="leve">Leve (exercício leve 1-3 dias/semana)</option>
+            <option value="moderado">Moderado (exercício moderado 3-5 dias/semana)</option>
+            <option value="ativo">Ativo (exercício intenso 6-7 dias/semana)</option>
+            <option value="muito ativo">Muito ativo (exercício intenso diariamente ou trabalho físico)</option>
           </select>
         </div>
 
         <div className="form-group">
           <label htmlFor="diet">Padrão alimentar</label>
-          <select id="diet" name="diet" value={padraoAlimentar} onChange={(e) => setPadraoAlimentar(e.target.value)} required>
+          <select
+            id="diet"
+            name="diet"
+            value={localAlimentar}
+            onChange={(e) => setLocalAlimentar(e.target.value)}
+            required
+          >
             <option value="">Selecione...</option>
             <option value="balanceado">Balanceada</option>
             <option value="rico em carboidratos">Rica em carboidratos</option>
@@ -58,7 +71,13 @@ export function LifeStyle() {
 
         <div className="form-group">
           <label htmlFor="smoking">Fuma atualmente?</label>
-          <select id="smoking" name="smoking" value={smoke} onChange={(e) => setSmoke(e.target.value)} required>
+          <select
+            id="smoking"
+            name="smoking"
+            value={localSmoke}
+            onChange={(e) => setLocalSmoke(e.target.value)}
+            required
+          >
             <option value="">Selecione...</option>
             <option value="nunca">Nunca fumei</option>
             <option value="ex-fumante">Ex-fumante</option>
@@ -68,7 +87,13 @@ export function LifeStyle() {
 
         <div className="form-group">
           <label htmlFor="alcohol">Consumo de álcool</label>
-          <select id="alcohol" name="alcohol" value={alcohol} onChange={(e) => setAlocohol(e.target.value)} required>
+          <select
+            id="alcohol"
+            name="alcohol"
+            value={localAlcohol}
+            onChange={(e) => setLocalAlcohol(e.target.value)}
+            required
+          >
             <option value="">Selecione...</option>
             <option value="nunca">Nunca</option>
             <option value="casualmente">Ocasionalmente</option>
@@ -81,7 +106,6 @@ export function LifeStyle() {
           <button
             type="button"
             className="btn btn-outline prev-btn"
-            data-prev="section3"
             onClick={handleBackPage}
           >
             Anterior
@@ -89,7 +113,6 @@ export function LifeStyle() {
           <button
             type="button"
             className="btn btn-primary next-btn"
-            data-next="section5"
             onClick={handleNextPage}
           >
             Próximo
@@ -97,5 +120,5 @@ export function LifeStyle() {
         </div>
       </div>
     </form>
-  )
+  );
 }

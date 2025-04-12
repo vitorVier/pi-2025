@@ -1,28 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+// @ts-ignore
+import { setGlicose, setSymptomFrequency, setSymptomDuration } from "../../redux/personal/personalSlice";
 
 export function Sintomas() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [glicose, setGlicose] = useState("");
-  const [sintomasFrequentes, setSintomasFrequentes] = useState([""]);
-  const [symptomDuration, setSymptomDuration] = useState("");
+  // @ts-ignore
+  const { glicose, sintomasFrequentes, symptomDuration } = useSelector((state) => state.pessoal);
+
+  const [localGlicose, setLocalGlicose] = useState(glicose || "");
+  const [localSintomas, setLocalSintomas] = useState<string[]>(sintomasFrequentes || []);
+  const [localDuration, setLocalDuration] = useState(symptomDuration || "");
 
   function handleBackPage() {
-    navigate('/historico')
+    navigate("/historico");
   }
+
   function handleNextPage() {
-    console.log(`Nivel de Glicose: ${glicose}, Sintomas Frequentes: ${sintomasFrequentes}, Há quanto tempo apresenta os sintomas: ${symptomDuration}`);
-    navigate('/lifeStyle')
+    dispatch(setGlicose(localGlicose));
+    dispatch(setSymptomFrequency(localSintomas));
+    dispatch(setSymptomDuration(localDuration));
+    navigate("/lifeStyle");
   }
 
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
     const { value, checked } = e.target;
-
-    setSintomasFrequentes((prev) =>
+    setLocalSintomas((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)
     );
-  };
+  }
 
   return (
     <form id="diabetesForm">
@@ -37,8 +46,8 @@ export function Sintomas() {
             name="glucose"
             min="50"
             max="500"
-            value={glicose} 
-            onChange={(e) => setGlicose(e.target.value)}
+            value={localGlicose}
+            onChange={(e) => setLocalGlicose(e.target.value)}
             required
           />
         </div>
@@ -46,72 +55,26 @@ export function Sintomas() {
         <div className="form-group">
           <label>Sintomas frequentes (marque todos que se aplicam)</label>
           <div className="checkbox-group">
-            <div className="checkbox-option">
-              <input
-                type="checkbox"
-                id="symptom_thirst"
-                name="symptoms"
-                value="Sede Excessiva"
-                checked={sintomasFrequentes.includes("Sede Excessiva")}
-                onChange={(e) => handleCheckbox(e)}
-              />
-              <label htmlFor="symptom_thirst">Sede excessiva</label>
-            </div>
-            <div className="checkbox-option">
-              <input
-                type="checkbox"
-                id="symptom_urination"
-                name="symptoms"
-                value="Micção frequente"
-                checked={sintomasFrequentes.includes("Micção frequente")}
-                onChange={(e) => handleCheckbox(e)}
-              />
-              <label htmlFor="symptom_urination">Micção frequente</label>
-            </div>
-            <div className="checkbox-option">
-              <input
-                type="checkbox"
-                id="symptom_hunger"
-                name="symptoms"
-                value="Fome excessiva"
-                checked={sintomasFrequentes.includes("Fome excessiva")}
-                onChange={(e) => handleCheckbox(e)}
-              />
-              <label htmlFor="symptom_hunger">Fome excessiva</label>
-            </div>
-            <div className="checkbox-option">
-              <input
-                type="checkbox"
-                id="symptom_fatigue"
-                name="symptoms"
-                value="Fadiga"
-                checked={sintomasFrequentes.includes("Fadiga")}
-                onChange={(e) => handleCheckbox(e)}
-              />
-              <label htmlFor="symptom_fatigue">Fadiga</label>
-            </div>
-            <div className="checkbox-option">
-              <input
-                type="checkbox"
-                id="symptom_blurred"
-                name="symptoms"
-                value="Visão turva"
-                checked={sintomasFrequentes.includes("Visão turva")}
-                onChange={(e) => handleCheckbox(e)}
-              />
-              <label htmlFor="symptom_blurred">Visão turva</label>
-            </div>
-            <div className="checkbox-option">
-              <input
-                type="checkbox"
-                id="symptom_weight"
-                name="symptoms"
-                value="Perda de peso inexplicada"
-                checked={sintomasFrequentes.includes("Perda de peso inexplicada")}
-                onChange={(e) => handleCheckbox(e)}
-              />
-              <label htmlFor="symptom_weight">Perda de peso inexplicada</label>
-            </div>
+            {[
+              "Sede Excessiva",
+              "Micção frequente",
+              "Fome excessiva",
+              "Fadiga",
+              "Visão turva",
+              "Perda de peso inexplicada"
+            ].map((symptom) => (
+              <div className="checkbox-option" key={symptom}>
+                <input
+                  type="checkbox"
+                  id={symptom}
+                  name="symptoms"
+                  value={symptom}
+                  checked={localSintomas.includes(symptom)}
+                  onChange={handleCheckbox}
+                />
+                <label htmlFor={symptom}>{symptom}</label>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -119,7 +82,13 @@ export function Sintomas() {
           <label htmlFor="symptom_duration">
             Há quanto tempo apresenta esses sintomas?
           </label>
-          <select id="symptom_duration" name="symptom_duration" value={symptomDuration} onChange={(e) => setSymptomDuration(e.target.value)} required>
+          <select
+            id="symptom_duration"
+            name="symptom_duration"
+            value={localDuration}
+            onChange={(e) => setLocalDuration(e.target.value)}
+            required
+          >
             <option value="">Selecione...</option>
             <option value="dias">Dias</option>
             <option value="semanas">Semanas</option>
@@ -132,7 +101,6 @@ export function Sintomas() {
           <button
             type="button"
             className="btn btn-outline prev-btn"
-            data-prev="section2"
             onClick={handleBackPage}
           >
             Anterior
@@ -140,7 +108,6 @@ export function Sintomas() {
           <button
             type="button"
             className="btn btn-primary next-btn"
-            data-next="section4"
             onClick={handleNextPage}
           >
             Próximo
@@ -148,5 +115,5 @@ export function Sintomas() {
         </div>
       </div>
     </form>
-  )
+  );
 }
