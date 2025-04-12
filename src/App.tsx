@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Layout } from "./components/layout";
-import { Pessoal } from "./pages/pessoal";
+import { Personal } from "./pages/personal";
 import { MedicalHistory } from "./pages/medicalHistory";
 import { Sintomas } from "./pages/sintomas";
 import { LifeStyle } from "./pages/estilo";
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Pessoal />,
+        element: <Personal />,
       },
       {
         path: "/historico",
