@@ -350,7 +350,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
-  .container, #diabetesForm, .tab-content {
+  .container, .tab-content {
     margin: 1rem;
     padding: 1rem;
   }
