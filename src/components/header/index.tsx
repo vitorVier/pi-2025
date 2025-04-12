@@ -1,7 +1,12 @@
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router-dom'
 import '../../App.css'
 
 export function Header() {
+    const location = useLocation();
+
+    // @ts-ignore
+    const isActive = (path) => location.pathname.startsWith(path);
+
     return (
         <div className="container">
             <div className="header">
@@ -11,29 +16,22 @@ export function Header() {
 
             <div className="tabs">
                 <Link to='/'>
-                    <div className="tab active" data-tab="form">
+                    <div className={`tab ${location.pathname === '/' ? 'active' : ''}`} data-tab="form">
                         Formulário
                     </div>
                 </Link>
 
                 <Link to='/results'>
-                    <div className="tab" data-tab="results">
+                    <div className={`tab ${isActive('/results') ? 'active' : ''}`} data-tab="results">
                         Resultados
                     </div>
                 </Link>
 
                 <Link to='/relatorios'>
-                    <div className="tab" data-tab="reports">
+                    <div className={`tab ${isActive('/relatorios') ? 'active' : ''}`} data-tab="reports">
                         Relatórios
                     </div>
                 </Link>
-            </div>
-
-            {/* <!-- Conteúdo da aba Formulário --> */}
-            <div className="tab-content active" id="form-tab">
-                <div className="progress-bar">
-                    <div className="progress" id="progress"></div>
-                </div>
             </div>
         </div>
     )
