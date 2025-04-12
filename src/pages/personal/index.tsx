@@ -27,7 +27,6 @@ export function Personal() {
     dispatch(setWeight(localWeight));
     dispatch(setHeight(localHeight));
 
-    console.log(`Age: ${localAge}, Gender: ${localGender}, Weight: ${localWeight}, Height: ${localHeight}`);
     navigate("/historico");
   }
 
