@@ -110,27 +110,6 @@ const personalSlice = createSlice({
     setObservacoes: (state, action) => {
       state.sintomasData.height = action.payload;
       console.log(action.payload)
-      console.log()
-      console.log(`
-        Idade: ${state.personalData.age},
-        Genero: ${state.personalData.gender},
-        Peso: ${state.personalData.weight},
-        Altura: ${state.personalData.height},
-        Diabetico: ${state.medicalHistoryData.diabetes},
-        Hipertenso: ${state.medicalHistoryData.hipertensao},
-        Cardiaco: ${state.medicalHistoryData.cardiaco},
-        Glicose: ${setGlicose}, 
-        Sintomas Frequentes: ${setSymptomFrequency}, 
-        Duração dos Sintomas: ${setSymptomDuration},
-        Atividade: ${state.lifeStyleData.gestacoes},
-        Padrão Alimentar: ${state.lifeStyleData.gestacoes},
-        Fuma: ${state.lifeStyleData.gestacoes},
-        Alcoolatra: ${state.lifeStyleData.gestacoes},
-        Gestações: ${state.sintomasData.gestacoes},
-        Triceps: ${state.sintomasData.triceps},
-        Insulina: ${state.sintomasData.insulina},
-        Observações: ${state.sintomasData.observacoes}
-      `)
     },
   },
 });
