@@ -13,16 +13,21 @@ const initialState = {
     cardiaco: ""
   },
   sintomasData: {
-    gestacoes: "",
-    triceps: "",
-    insulina: "",
-    observacoes: ""
+    glicose: "",
+    symptomFrequency: "",
+    symptomDuration: "",
   },
   lifeStyleData: {
     atividade: "",
     alimentacao: "",
     alcohol: "",
     smoke: ""
+  },
+  addInfoData: {
+    gestacoes: "",
+    triceps: "",
+    insulina: "",
+    obs: ""
   }
 };
 
@@ -76,7 +81,7 @@ const personalSlice = createSlice({
       console.log(action.payload)
     },
 
-    // Sintomas Data Reducers
+    // Life Style Data Reducers
     setAtividade: (state, action) => {
       state.lifeStyleData.diabetes = action.payload;
       console.log(action.payload)
@@ -142,5 +147,5 @@ export default personalSlice.reducer;
 //   Gestações: ${state.sintomasData.gestacoes},
 //   Triceps: ${state.sintomasData.triceps},
 //   Insulina: ${state.sintomasData.insulina},
-//   Observações: ${state.sintomasData.observacoes}
+//   Observações: ${state.sintomasData.obs}
 // `)
