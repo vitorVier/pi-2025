@@ -27,8 +27,8 @@ export function Header() {
                     </div>
                 </Link>
 
-                <Link to='/relatorios'>
-                    <div className={`tab ${isActive('/relatorios') ? 'active' : ''}`} data-tab="reports">
+                <Link to='/reports'>
+                    <div className={`tab ${isActive('/reports') ? 'active' : ''}`} data-tab="reports">
                         Relatórios
                     </div>
                 </Link>
