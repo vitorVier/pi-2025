@@ -271,4 +271,3 @@ plt.show()
 # ============================
 joblib.dump(random_search.best_estimator_, 'modelo_diabetes.pkl')
 print("Modelo salvo com sucesso!")
-
