@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Caminho do seu arquivo CSV
-file_path = "C:/Users/Darles Thume/Downloads/dados_dediabetes.csv"
+file_path = "dados_dediabetes.csv"
 
 # Carregar os dados
 df = pd.read_csv(file_path)
@@ -77,7 +77,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from imblearn.over_sampling import SMOTE
 
 # Carregar os dados
-file_path = "C:/Users/Darles Thume/Downloads/dados_dediabetes.csv"
+file_path = "dados_dediabetes.csv"
 df = pd.read_csv(file_path)
 
 # Codificar variáveis categóricas
@@ -199,7 +199,7 @@ import seaborn as sns
 # ============================
 # CARREGAR E PRÉ-PROCESSAR OS DADOS
 # ============================
-df = pd.read_csv("C:/Users/Darles Thume/Downloads/dados_dediabetes.csv")
+df = pd.read_csv("dados_dediabetes.csv")
 
 # Codificar variáveis categóricas
 label_encoders = {}
