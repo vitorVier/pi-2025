@@ -1,4 +1,17 @@
+import { useSelector } from 'react-redux';
+
 export function Results() {
+    // @ts-ignore
+    const personalData = useSelector((state) => state.pessoal.personalData);
+    // @ts-ignore
+    const medicalHistoryData = useSelector((state) => state.pessoal.medicalHistoryData);
+    // @ts-ignore
+    const sintomasData = useSelector((state) => state.pessoal.sintomasData);
+    // @ts-ignore
+    const lifeStyleData = useSelector((state) => state.pessoal.lifeStyleData);
+    // @ts-ignore
+    const addInfoData = useSelector((state) => state.pessoal.addInfoData);
+
     return (
         <div className="tab-content" id="results-tab">
             <h2>Histórico de Diagnósticos</h2>
@@ -43,7 +56,7 @@ export function Results() {
                 <thead>
                     <tr>
                         <th>Data</th>
-                        <th>Paciente</th>
+                        <th>Sexo</th>
                         <th>Idade</th>
                         <th>Tipo</th>
                         <th>Probabilidade</th>
@@ -51,7 +64,18 @@ export function Results() {
                     </tr>
                 </thead>
                 <tbody id="results-table">
-                    {/* <!-- Dados serão preenchidos via JavaScript --> */}
+                    <tr>
+                        <td>{new Date().toLocaleDateString()}</td>
+                        <td>{personalData.gender}</td>
+                        <td>{personalData.age}</td>
+                        <td>{medicalHistoryData.diabetes}</td>
+                        <td>{sintomasData.glicose}%</td>
+                        <td>{
+                            sintomasData.glicose >= 70 ? 'Alto' :
+                            sintomasData.glicose >= 40 ? 'Médio' :
+                            sintomasData.glicose === null ? '' : 'Baixo'
+                        }</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
