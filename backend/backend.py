@@ -14,6 +14,13 @@ from scipy.stats import randint
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+
+file_path = "C:/Users/Vitor/pi-2025/backend/dados_dediabetes_completos.csv"
+if os.path.exists(file_path):
+    df = pd.read_csv(file_path)
+else:
+    print(f"Arquivo não encontrado em: {file_path}")
 
 # ============================
 # CARREGAR E PRÉ-PROCESSAR OS DADOS
@@ -21,11 +28,11 @@ import seaborn as sns
 import pandas as pd
 
 def processar_dados():
-    df = pd.read_csv("C:/Users/Darles Thume/Downloads/diabetes_prediction_dataset.csv")
+    df = pd.read_csv("C:/Users/Vitor/pi-2025/backend/dados_dediabetes_completos.csv")
     df.dropna(inplace=True)
     # Continue com o resto do processamento dos dados
 
-df = pd.read_csv("C:/Users/Darles Thume/Downloads/diabetes_prediction_dataset.csv")
+df = pd.read_csv("C:/Users/Vitor/pi-2025/backend/dados_dediabetes_completos.csv")
 df.dropna(inplace=True)
 label_encoders = {}
 for col in ['gender', 'smoking_history']:
