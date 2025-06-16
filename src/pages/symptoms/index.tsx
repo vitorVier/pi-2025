@@ -41,11 +41,9 @@ export function Symptoms() {
         <div className="form-group">
           <label htmlFor="glucose">Nível de glicose no sangue (mg/dL)</label>
           <input
-            type="number"
+            type="text"
             id="glucose"
             name="glucose"
-            min="50"
-            max="500"
             value={localGlicose}
             onChange={(e) => setLocalGlicose(e.target.value)}
             required

@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -10,6 +11,7 @@ import joblib # Usado para salvar e carregar o modelo
 
 # --- Configuração da Aplicação ---
 app = Flask(__name__)
+CORS(app)
 
 # --- Constantes e Variáveis Globais ---
 MODEL_PATH = 'diabetes_model.joblib'
@@ -154,6 +156,8 @@ def diagnosticar():
         df_paciente = pd.DataFrame([dados_paciente])
 
         # Pré-processamento idêntico ao de treino para os dados do paciente
+        df_paciente.replace('', 0, inplace=True)  # evita conversão errada de string vazia
+
         # Colunas binárias
         df_paciente.replace({'sim': 1, 'não': 0, 'masculino': 0, 'feminino': 1}, inplace=True)
         

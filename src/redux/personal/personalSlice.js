@@ -28,7 +28,11 @@ const initialState = {
     triceps: "",
     insulina: "",
     obs: ""
-  }
+  },
+  diagnosisResult: {
+    diagnostico: "",
+    confianca: null,
+  },
 };
 
 const personalSlice = createSlice({
@@ -69,52 +73,57 @@ const personalSlice = createSlice({
 
     // Sintomas Data Reducers
     setGlicose: (state, action) => {
-      state.medicalHistoryData.diabetes = action.payload;
+      state.sintomasData.glicose = action.payload;
       console.log(action.payload)
     },
     setSymptomFrequency: (state, action) => {
-      state.medicalHistoryData.hipertensao = action.payload;
+      state.sintomasData.symptomFrequency = action.payload;
       console.log(action.payload)
     },
     setSymptomDuration: (state, action) => {
-      state.medicalHistoryData.cardiaco = action.payload;
+      state.sintomasData.symptomDuration = action.payload;
       console.log(action.payload)
     },
 
     // Life Style Data Reducers
     setAtividade: (state, action) => {
-      state.lifeStyleData.diabetes = action.payload;
+      state.lifeStyleData.atividade = action.payload;
       console.log(action.payload)
     },
     setPadraoAlimentar: (state, action) => {
-      state.lifeStyleData.hipertensao = action.payload;
+      state.lifeStyleData.alimentacao = action.payload;
       console.log(action.payload)
     },
     setSmoke: (state, action) => {
-      state.lifeStyleData.hipertensao = action.payload;
+      state.lifeStyleData.smoke = action.payload;
       console.log(action.payload)
     },
     setAlcohol: (state, action) => {
-      state.lifeStyleData.cardiaco = action.payload;
+      state.lifeStyleData.alcohol = action.payload;
       console.log(action.payload)
     },
 
     // Aditional Info Reducers
     setGestacoes: (state, action) => {
-      state.sintomasData.age = action.payload;
+      state.sintomasData.gestacoes = action.payload;
       console.log(state.sintomasData.age)
     },
     setTriceps: (state, action) => {
-      state.sintomasData.gender = action.payload;
+      state.sintomasData.triceps = action.payload;
       console.log(action.payload)
     },
     setInsulina: (state, action) => {
-      state.sintomasData.weight = action.payload;
+      state.sintomasData.insulina = action.payload;
       console.log(action.payload)
     },
     setObservacoes: (state, action) => {
-      state.sintomasData.height = action.payload;
+      state.sintomasData.obs = action.payload;
       console.log(action.payload)
+    },
+
+    // Diagnostico
+    setDiagnosisResult: (state, action) => {
+      state.diagnosisResult = action.payload;
     },
   },
 });
@@ -124,7 +133,8 @@ export const {
   setDiabetes, setHipertensao, setCardiaco,
   setGlicose, setSymptomFrequency, setSymptomDuration,
   setAtividade, setPadraoAlimentar, setSmoke, setAlcohol,
-  setGestacoes, setTriceps, setInsulina, setObservacoes
+  setGestacoes, setTriceps, setInsulina, setObservacoes,
+  setDiagnosisResult
 } = personalSlice.actions;
 export default personalSlice.reducer;
 
