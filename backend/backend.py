@@ -10,7 +10,7 @@ import os
 import joblib # Usado para salvar e carregar o modelo
 import sqlite3
 from datetime import datetime
-from db import obter_total_diagnosticos
+from db import obter_total_diagnosticos, salvar_diagnostico, listar_diagnosticos
 
 # --- Configuração da Aplicação ---
 app = Flask(__name__)
@@ -209,6 +209,15 @@ def diagnosticar():
         
         print(f"🔍 Diagnóstico: {diagnostico} com {confianca}% de confiança.")
         
+        # Salvar no banco
+        salvar_diagnostico({
+            "idade": dados_paciente.get("age", 0),
+            "genero": dados_paciente.get("gender", "desconhecido"),
+            "resultado": diagnostico,
+            "confianca": confianca / 100,  # banco armazena como 0.xx
+            "data": datetime.now().isoformat()
+        })
+
         return jsonify({
             "diagnostico": diagnostico,
             "confianca_percentual": confianca
@@ -222,6 +231,10 @@ def diagnosticar():
 def relatorio():
     total = obter_total_diagnosticos()
     return jsonify({'total_diagnosticos': total})
+
+@app.route('/historico', methods=['GET'])
+def historico():
+    return jsonify(listar_diagnosticos())
 
 # --- Execução da Aplicação ---
 if __name__ == '__main__':
