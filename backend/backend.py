@@ -8,10 +8,43 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 import os
 import joblib # Usado para salvar e carregar o modelo
+import sqlite3
+from datetime import datetime
+from db import obter_total_diagnosticos
 
 # --- Configuração da Aplicação ---
 app = Flask(__name__)
 CORS(app)
+
+# Conexão única com SQLite
+conn = sqlite3.connect("diagnosticos.db", check_same_thread=False)
+cursor = conn.cursor()
+
+# Cria tabela se não existir
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS relatorios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    total_diagnosticos INTEGER,
+    data TEXT
+)
+""")
+conn.commit()
+
+def salvar_relatorio(total_diagnosticos: int):
+    data = datetime.now().isoformat()
+    cursor.execute(
+        "INSERT INTO relatorios (total_diagnosticos, data) VALUES (?, ?)",
+        (total_diagnosticos, data)
+    )
+    conn.commit()
+
+def obter_ultimo_relatorio():
+    row = cursor.execute(
+        "SELECT * FROM relatorios ORDER BY id DESC LIMIT 1"
+    ).fetchone()
+    if row:
+        return {"id": row[0], "total_diagnosticos": row[1], "data": row[2]}
+    return {"id": 0, "total_diagnosticos": 0, "data": ""}
 
 # --- Constantes e Variáveis Globais ---
 MODEL_PATH = 'diabetes_model.joblib'
@@ -184,6 +217,11 @@ def diagnosticar():
     except Exception as e:
         print(f"❌ Erro na predição: {e}")
         return jsonify({"error": "Erro ao processar o diagnóstico.", "detalhes": str(e)}), 500
+
+@app.route('/relatorio', methods=['GET'])
+def relatorio():
+    total = obter_total_diagnosticos()
+    return jsonify({'total_diagnosticos': total})
 
 # --- Execução da Aplicação ---
 if __name__ == '__main__':

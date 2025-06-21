@@ -33,6 +33,7 @@ const initialState = {
     diagnostico: "",
     confianca: null,
   },
+  diagnosisHistory: []
 };
 
 const personalSlice = createSlice({
@@ -125,6 +126,9 @@ const personalSlice = createSlice({
     setDiagnosisResult: (state, action) => {
       state.diagnosisResult = action.payload;
     },
+    addDiagnosisToHistory: (state, action) => {
+      state.diagnosisHistory.push(action.payload);
+    }
   },
 });
 
@@ -134,28 +138,6 @@ export const {
   setGlicose, setSymptomFrequency, setSymptomDuration,
   setAtividade, setPadraoAlimentar, setSmoke, setAlcohol,
   setGestacoes, setTriceps, setInsulina, setObservacoes,
-  setDiagnosisResult
+  setDiagnosisResult, addDiagnosisToHistory
 } = personalSlice.actions;
 export default personalSlice.reducer;
-
-// RETORNA GERAL
-// console.log(`
-//   Idade: ${state.personalData.age},
-//   Genero: ${state.personalData.gender},
-//   Peso: ${state.personalData.weight},
-//   Altura: ${state.personalData.height},
-//   Diabetico: ${state.medicalHistoryData.diabetes},
-//   Hipertenso: ${state.medicalHistoryData.hipertensao},
-//   Cardiaco: ${state.medicalHistoryData.cardiaco},
-//   Glicose: ${setGlicose}, 
-//   Sintomas Frequentes: ${setSymptomFrequency}, 
-//   Duração dos Sintomas: ${setSymptomDuration},
-//   Atividade: ${state.lifeStyleData.gestacoes},
-//   Padrão Alimentar: ${state.lifeStyleData.gestacoes},
-//   Fuma: ${state.lifeStyleData.gestacoes},
-//   Alcoolatra: ${state.lifeStyleData.gestacoes},
-//   Gestações: ${state.sintomasData.gestacoes},
-//   Triceps: ${state.sintomasData.triceps},
-//   Insulina: ${state.sintomasData.insulina},
-//   Observações: ${state.sintomasData.obs}
-// `)

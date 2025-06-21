@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-// @ts-ignore
-import { setGestacoes, setTriceps, setInsulina, setObservacoes, setDiagnosisResult } from "../../redux/personal/personalSlice"; 
+import {
+    setDiagnosisResult, 
+    addDiagnosisToHistory 
+    // @ts-ignore
+} from "../../redux/personal/personalSlice"; 
 
 export function AddInformation() {
     const navigate = useNavigate();
@@ -18,7 +21,7 @@ export function AddInformation() {
         gestacoes, 
         triceps, 
         insulina, 
-        observacoes 
+        observacoes
         // @ts-ignore
     } = useSelector((state) => state.pessoal);
 
@@ -76,6 +79,15 @@ export function AddInformation() {
                     diagnostico: data.diagnostico,
                     confianca: data.confianca_percentual
                 }));
+                dispatch(addDiagnosisToHistory({
+                    date: new Date().toISOString(),
+                    diagnostico: data.diagnostico,
+                    confianca: data.confianca_percentual,
+                    age: payload.age,
+                    gender: payload.gender,
+                    risco: data.confianca_percentual >= 70 ? "alto" : data.confianca_percentual >= 40 ? "médio" : "baixo"
+                }));
+                window.dispatchEvent(new Event("atualizarRelatorio"));
                 navigate("/results");
             } else {
                 alert("Erro ao diagnosticar: " + data.error);
