@@ -35,16 +35,6 @@ export function Reports() {
     };
   }, []);
 
-  // Função de exemplo para simular novo diagnóstico e disparar atualização
-  // Você deve chamar essa função no fluxo real de criação de diagnóstico
-  const simularNovoDiagnostico = async () => {
-    // Aqui você faria o POST para seu backend salvar diagnóstico
-    // await fetch('http://localhost:5000/diagnostico', { ... })
-
-    // Após sucesso, dispara o evento para atualizar relatório
-    window.dispatchEvent(new Event("atualizarRelatorio"));
-  };
-
   return (
     <div className="tab-content" id="reports-tab">
       <h2>Relatórios Estatísticos</h2>
@@ -74,13 +64,6 @@ export function Reports() {
           <div className="stats-label">Casos de alto risco</div>
         </div>
       </div>
-
-      {/* Botão para simular novo diagnóstico e disparar atualização */}
-      <button onClick={simularNovoDiagnostico} style={{ marginTop: 20 }}>
-        Simular Novo Diagnóstico
-      </button>
-
-      {/* Os gráficos serão adicionados abaixo */}
     </div>
   );
 }

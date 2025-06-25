@@ -4,7 +4,7 @@ import { Personal } from "./pages/personal";
 import { MedicalHistory } from "./pages/medicalHistory";
 import { Symptoms } from "./pages/symptoms";
 import { LifeStyle } from "./pages/lifeStyle";
-import { Results } from "./pages/results";
+import { Results } from "./pages/results/index";
 import { Reports } from "./pages/reports";
 import { AddInformation } from "./pages/addInformation";
 

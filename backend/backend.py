@@ -229,8 +229,29 @@ def diagnosticar():
 
 @app.route('/relatorio', methods=['GET'])
 def relatorio():
-    total = obter_total_diagnosticos()
-    return jsonify({'total_diagnosticos': total})
+    try:
+        total = obter_total_diagnosticos()
+
+        cursor.execute("SELECT COUNT(*) FROM diagnosticos WHERE resultado IN (1, 2, 3, 4)")
+        casos_diabetes = cursor.fetchone()[0]
+
+        cursor.execute("SELECT AVG(idade) FROM diagnosticos")
+        idade_media = cursor.fetchone()[0] or 0
+
+        cursor.execute("SELECT COUNT(*) FROM diagnosticos WHERE confianca >= 0.9")
+        casos_risco = cursor.fetchone()[0]
+
+        risco_percentual = round((casos_risco / total) * 100, 2) if total > 0 else 0
+
+        return jsonify({
+            "total_diagnosticos": total,
+            "casos_diabetes": casos_diabetes,
+            "idadeavg": round(idade_media, 1),
+            "risco": risco_percentual
+        })
+    except Exception as e:
+        print(f"Erro ao gerar relatório: {e}")
+        return jsonify({"error": "Erro ao gerar relatório", "detalhes": str(e)}), 500
 
 @app.route('/historico', methods=['GET'])
 def historico():
